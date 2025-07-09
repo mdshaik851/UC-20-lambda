@@ -9,7 +9,7 @@ resource "aws_lambda_function" "contact_form_handler" {
   function_name    = var.function_name
   role            = var.lambda_role_arn
   handler         = "index.handler"
-  runtime         = "nodejs18.x"
+  runtime         = "nodejs16.x"
   timeout         = 30
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 

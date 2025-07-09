@@ -1,6 +1,6 @@
 # Configuration for Gmail-only SES setup
 
-aws_region           = "ap-south-1"
+aws_region           = "ap-northeast-3"
 lambda_function_name = "contact-form-handler"
 dynamodb_table_name  = "contact-form-submissions"
 api_name             = "contact-form-api"
