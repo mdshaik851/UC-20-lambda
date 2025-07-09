@@ -1,0 +1,58 @@
+name: Deploy Contact Form API
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ap-northeast-3
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      # with:
+      #   terraform_version: 1.5.0
+    
+    - name: Configure AWS Credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: arn:aws:iam::994466158061:role/OIDC-Github-action
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Install Lambda dependencies
+      run: |
+        cd modules/lambda/src
+        npm install
+    
+    - name: Terraform Format
+      run: terraform fmt -recursive
+    
+    - name: Terraform Init
+      run: terraform init
+    
+    - name: Terraform Validate
+      run: terraform validate
+    
+    - name: Terraform Plan
+      run: terraform plan -no-color
+      continue-on-error: true
+    
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      run: terraform apply -auto-approve
+    
+    - name: Output API Endpoint
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      run: terraform output api_endpoint
