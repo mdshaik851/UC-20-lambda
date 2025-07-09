@@ -102,7 +102,7 @@ resource "aws_api_gateway_rest_api" "contact_api" {
 # Wait for API to be fully ready
 resource "time_sleep" "wait_for_api" {
   depends_on = [aws_api_gateway_rest_api.contact_api]
-  create_duration = "10s"
+  create_duration = "50s"
 }
 
 # /contact resource
