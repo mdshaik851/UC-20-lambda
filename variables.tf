@@ -1,19 +1,44 @@
 variable "aws_region" {
-  default = "us-west-1"
+  description = "AWS region"
+  type        = string
+  default     = "ap-northeast-3"
 }
- 
+
+variable "lambda_function_name" {
+  description = "Name of the Lambda function"
+  type        = string
+  default     = "contact-form-handler"
+}
+
 variable "dynamodb_table_name" {
-  default = "contact-form-data"
-}
- 
-variable "sender_email" {
-  description = "Verified sender email in SES"
+  description = "Name of the DynamoDB table"
   type        = string
-  default = "mohammedabdul.shaik@hcltech.com"
+  default     = "contact-form-submissions"
 }
- 
-variable "recipient_email" {
-  description = "Verified recipient email in SES"
+
+variable "api_name" {
+  description = "Name of the API Gateway"
   type        = string
-  default = "mohammedabdul.shaik@hcltech.com"
+  default     = "contact-form-api"
+}
+
+variable "ses_domain" {
+  description = "Domain for SES (must be verified)"
+  type        = string
+  default     = "example.com"
+}
+
+variable "notification_email" {
+  description = "Email address for notifications"
+  type        = string
+  default     = "contact@example.com"
+}
+
+variable "tags" {
+  description = "Tags to apply to all resources"
+  type        = map(string)
+  default = {
+    Project     = "contact-form-api"
+    Environment = "production"
+  }
 }
